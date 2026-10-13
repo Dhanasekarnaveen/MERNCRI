@@ -21,13 +21,27 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// Health check endpoint
+// Health check endpoint (can respond even if DB is initializing)
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     message: 'Mini CRM API is operating smoothly',
     timestamp: new Date().toISOString(),
   });
+});
+
+// Middleware to ensure database connection before handling data routes
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Database connection failed. Please ensure MONGODB_URI is configured correctly in Vercel.',
+      error: error.message,
+    });
+  }
 });
 
 // Mount Routes
@@ -43,6 +57,11 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+if (require.main === module || process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+}
+
+module.exports = app;
+
