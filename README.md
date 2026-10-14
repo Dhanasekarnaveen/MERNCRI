@@ -7,7 +7,7 @@ A production-grade, human-coded **Customer Relationship Management (Mini CRM)** 
 ## 📌 Mandatory Tech Stack
 
 - **Frontend**:
-  - **React** (v18+ with Vite)
+  - **React** (Standard React with `react-scripts`)
   - **React Router** (v6+ client-side declarative routing)
   - **Axios** (Configured with request/response interceptors & token injection)
   - **Bootstrap 5 & Bootstrap Icons** (Clean, human-coded, readable CSS styling & components)
@@ -53,6 +53,9 @@ CRMTask/
 │   └── package.json
 │
 ├── frontend/
+│   ├── public/
+│   │   ├── index.html            # Main HTML template
+│   │   └── _redirects            # Netlify routing redirect
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Layout/
@@ -72,8 +75,8 @@ CRMTask/
 │   │   ├── services/
 │   │   │   └── api.js            # Axios client with JWT interceptor
 │   │   ├── App.jsx               # Route definitions
-│   │   └── main.jsx              # App root bootstrap
-│   ├── vite.config.js            # Vite configuration with /api proxy
+│   │   ├── index.js              # React root entry point
+│   │   └── index.css             # Bootstrap styling
 │   └── package.json
 │
 ├── package.json                  # Root monorepo orchestrator scripts
@@ -286,8 +289,8 @@ npm run dev
 **Terminal 2 (Frontend React App)**:
 ```bash
 cd frontend
-npm run dev
-# Vite runs on http://localhost:3000
+npm start
+# React starts on http://localhost:3000
 ```
 
 Open your browser at **`http://localhost:3000`** to interact with the Mini CRM.
